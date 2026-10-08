@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Tarefas</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+
 </head>
 <body>
     <header class="flex justify-between items-center py-4 px-15 bg-purple-500">
         <input class="h-10 w-100 pl-4 rounded bg-white" type="text" placeholder="Pesquisar"/>
-        <button class="cursor-pointer leading-10 bg-purple-800 rounded px-4 font-bold text-white duration-200 hover:bg-purple-400 hover:text-black">Nova Tarefa</button>
+        <button onclick="abrirFormCriar()" class="cursor-pointer leading-10 bg-purple-800 rounded px-4 font-bold text-white duration-200 hover:bg-purple-400 hover:text-black">Nova Tarefa</button>
     </header>
     <main class="p-15 bg-slate-200">
        
         <h1 class="text-3xl font-bold mb-6">Tarefas</h1>
         <div id="tarefas" class="grid grid-cols-3 gap-4">
-            <div class="bg-white p-4 rounded-lg">
+            <!--div class="bg-white p-4 rounded-lg">
                 <h3 class="font-bold mb-4">Titulo do card</h3>
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut reprehenderit dolores nemo, neque consequatur excepturi quaerat expedita doloremque rem praesentium vitae laborum sed vel ea ad animi aliquid minus reiciendis!</p>
             </div>
@@ -23,19 +25,20 @@
             <div class="bg-white p-4 rounded-lg">
                 <h3 class="font-bold mb-4">Titulo do card2</h3>
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut reprehenderit dolores nemo, neque consequatur excepturi quaerat expedita doloremque rem praesentium vitae laborum sed vel ea ad animi aliquid minus reiciendis!</p>
-            </div>
+            </div>/-->
         </div>
-        <div id="overlay" class="w-full h-screen bg-black/70 fixed top-0 left-0"></div>
-        <div id="form-criar" class="w-100 p-4 rounded-lg bg-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div onclick="fecharFormCriar()" id="overlay" class="w-full h-screen bg-black/70 fixed top-0 left-0 opacity-0 invisible duration-200"></div>
+        <div id="form-criar" class="w-100 p-4 rounded-lg bg-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 invisible duration-200 delay-200">
+            <div class="flex justify-end">
+                <box-icon onclick="fecharFormCriar()" name='x' class="cursor-pointer"></box-icon>
+            </div>
             <form class="flex flex-col">
-                <label for="titulo" 
-                class="uppercase text-xs font-bold mb-2 block">Título</label>
-                <input 
-                id="titulo" 
-                type="text" 
-                placeholder="Titulo da tarefa" 
-                class="pl-3 h-10 border-2 border-slate-400 focus:border-purple-600 duration-150 rounded outline-none mb-4" 
-                required />
+                <label for="titulo" class="uppercase text-xs font-bold mb-2 block">Título</label>
+                <input id="titulo" type="text" placeholder="Titulo da tarefa" class="pl-3 h-10 border-2 border-slate-400 focus:border-purple-600 duration-150 rounded outline-none mb-4" required />
+                <label for="descricao" class="uppercase text-xs font-bold mb-2 block">Descrição</label>
+                
+                <textarea id="descricao" placeholder="Descrição" class="pl-3 h-30 border-2 border-slate-400 focus:border-purple-600 duration-150 rounded outline-none mb-4" required></textarea> 
+                <button onclick="criarTarefa()" type="submit" class="w-full h-10 rounded bg-purple-400 hover:bg-purple-600 duration-200 hover:text-white font-bold">Cadastrar</button>
             </form>
         </div>
         
