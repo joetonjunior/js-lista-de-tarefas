@@ -37,7 +37,7 @@ function carregarTarefas(listaTarefas){
                 <h3 class="font-bold mb-4">${tarefa.titulo}</h3>
                 <p>${tarefa.descricao}</p>
                 <div class="flex justify-end gap-3">
-                    <box-icon class="cursor-pointer hover:fill-purple-500" name="pencil"></box-icon>
+                    <box-icon onclick="abrirFormEditar(${tarefa.id})" class="cursor-pointer hover:fill-purple-500" name="pencil"></box-icon>
                     <box-icon onclick="deletarTarefa(${tarefa.id})" class="cursor-pointer hover:fill-purple-500" name="trash"></box-icon>
                 </div>
             </div>
@@ -59,6 +59,31 @@ function fecharFormCriar(){
     let formCriar = document.querySelector("#form-criar");
     overlay.classList.add("opacity-0", "invisible");
     formCriar.classList.add("opacity-0", "invisible");
+    overlay.value = "";
+    formCriar.value = "";
+}
+
+function abrirFormEditar(id){
+    let overlay = document.querySelector("#overlay");
+    let formeditar = document.querySelector("#form-editar");
+    let idEdicao = document.querySelector("#idEdicao");
+    let tituloEdicao = document.querySelector("#tituloEdicao");
+    let descricaoEdicao = document.querySelector("#descricaoEdicao");
+    let tarefa = tarefas.find(tarefa => tarefa.id == id);
+    overlay.classList.remove("opacity-0", "invisible");
+    formeditar.classList.remove("opacity-0", "invisible");
+    idEdicao.value = tarefa.id;
+    tituloEdicao.value = tarefa.titulo;
+    descricaoEdicao.value = tarefa.descricao;
+}
+
+function fecharFormEditar(){
+    let overlay = document.querySelector("#overlay");
+    let foreditar = document.querySelector("#form-editar");
+    overlay.classList.add("opacity-0", "invisible");
+    foreditar.classList.add("opacity-0", "invisible");
+    overlay.value = "";
+    foreditar.value = "";
 }
 
 function criarTarefa(){
@@ -92,6 +117,39 @@ function criarTarefa(){
     }
 
     
+}
+
+function editarTarefa(){
+    event.preventDefault();
+    try {
+        let usuario = JSON.parse(sessionStorage.getItem("usuario")) || null;
+        let titulo = document.querySelector("#tituloEdicao");
+        let descricao = document.querySelector("#descricaoEdicao");
+        let id = document.querySelector("#idEdicao");
+        let dados = {
+            titulo: titulo.value,
+            descricao: descricao.value,
+            usuario_id: usuario.id
+        }
+
+        fetch(`https://js-lista-de-tarefas-api.onrender.com/tarefas/${id.value}`,{
+            method: "put",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        })
+        .then(resposta => resposta.json())
+        .then(json => {
+            alert(json.mensagem);
+            fecharFormEditar();
+            buscarTarefas();
+        })
+        
+    } catch (error) {
+        alert("Error: ", error.message);
+    }
+
 }
 
 function deletarTarefa(id){
@@ -148,4 +206,15 @@ function hackearTarefa(){
     }
     fecharFormCriar();
     buscarTarefas();
+}
+
+function pesquisarTarefa(palavra){
+    if(palavra.length == 0){
+        carregarTarefas(tarefas);
+        return;
+    }
+    if(palavra.length >= 3){
+        let tarefasFiltradas = tarefas.filter(tarefa => tarefa.titulo.toLowerCase().includes(palavra.toLowerCase()));
+        carregarTarefas(tarefasFiltradas);
+    }
 }
